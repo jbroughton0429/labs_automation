@@ -1,0 +1,7 @@
+
+@@@@@@@@@@@@@@@@@@
+@@ Nice to have @@
+@@@@@@@@@@@@@@@@@@
+* Wrap packer ami output into variable for TF AMI
+* Script to output IP Addresses up completion of TF - used to connect and make changes to proxy	(Instead of relying on AWS Console
+	* terraform show - json -> send to python and output: name, region, key name, private ip address

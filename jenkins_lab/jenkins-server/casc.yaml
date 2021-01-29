@@ -1,0 +1,121 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - basicSSHUserPrivateKey:
+          description: "agent-ssh"
+          id: "agent-ssh"
+          privateKeySource:
+            directEntry:
+              privateKey: ""
+          scope: GLOBAL
+          username: "jenkins"
+jenkins:
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+  numExecutors: 2
+  mode: NORMAL
+  disableRememberMe: false
+  disabledAdministrativeMonitors:
+  - "hudson.diagnosis.ReverseProxySetupMonitor"
+  markupFormatter: "plainText"
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Administer:authenticated"
+  clouds:
+  - docker:
+      dockerApi:
+        connectTimeout: 60
+        dockerHost:
+          uri: "unix:///var/run/docker.sock"
+        readTimeout: 60
+      name: "docker-host"
+      templates:
+      - connector:
+          attach:
+            user: "jenkins"
+        dockerTemplateBase:
+          cpuPeriod: 0
+          cpuQuota: 0
+          image: "jenkins/agent"
+        instanceCapStr: "10"
+        labelString: "docker-agent"
+        mode: EXCLUSIVE
+        name: "docker-agent"
+        pullStrategy: PULL_ALWAYS
+        pullTimeout: 300
+        remoteFs: "/home/jenkins/agent"
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+  labelAtoms:
+  - name: "agent-jnlp"
+  - name: "agent-ssh"
+  - name: "docker-agent"
+  - name: "jnlp"
+  - name: "master"
+  - name: "ssh"
+  nodes:
+  - permanent:
+      labelString: "jnlp"
+      launcher:
+        jnlp:
+          workDirSettings:
+            disabled: false
+            failIfWorkDirIsMissing: false
+            internalDir: "remoting"
+            workDirPath: "/home/jenkins/agent"
+      mode: EXCLUSIVE
+      name: "agent-jnlp"
+      nodeDescription: "JNLP agent"
+      remoteFS: "/home/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      labelString: "ssh"
+      launcher:
+        ssh:
+          credentialsId: "agent-ssh"
+          host: "agent-ssh"
+          port: 22
+          sshHostKeyVerificationStrategy:
+            manuallyTrustedKeyVerificationStrategy:
+              requireInitialManualTrust: false
+      name: "agent-ssh"
+      nodeDescription: "SSH Agent"
+      remoteFS: "/home/jenkins"
+      retentionStrategy: "always"
+  projectNamingStrategy: "standard"
+  quietperiod: 5
+  remotingSecurity:
+    enabled: true
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: ${ADMIN_USER}
+          password: ${ADMIN_PASSWORD}
+        - id: "jnlp"
+          name: "jnlp token/crumb user"
+  slaveAgentPort: 50000
+  updateCenter:
+    sites:
+    - id: "default"
+      url: "https://updates.jenkins.io/update-center.json"
+
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  queueItemAuthenticator:
+    authenticators:
+    - global:
+        strategy: "triggeringUsersAuthorizationStrategy"
+  sSHD:
+    port: 0
+
+unclassified:
+  location:
+    url: http://jenkins:8080/

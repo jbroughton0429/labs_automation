@@ -1,0 +1,22 @@
+version: '3.9'
+services:  
+  jenkins-jnlp:
+    container_name: agent-jnlp
+    build: ./agent-jnlp
+    environment:
+      JENKINS_URL: http://jenkins:8080
+      JENKINS_SECRET: c5f6daa45d1f9efc81e888ae51c4ee6fd6e182e94cbf3e05de0542289bead395
+      JENKINS_AGENT_NAME: agent-jnlp
+      JENKINS_AGENT_WORKDIR: /home/jenkins/agent
+    networks:
+      - net
+  jenkins-ssh:
+    container_name: agent-ssh
+    build: ./agent-ssh
+    environment:
+      JENKINS_AGENT_SSH_PUBKEY: ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAws98h0kiGzivXnkVf+0w2wI6bxKSxIyhVYL8DwSB149YEH2q4YZTEgRz/gczJfyrUCZCoJt1HVqhHVj51lChZuKs/ZNwl6tW9sXYBgcDjBaivn81nZbjPduoSIW6998C+N7tW7K2C+7aaLEeQ/FRf9FeXTnsPf0nPMrAcYSJmL0OeJQamleeyTccraVTDZFACh99lEnvmK6mAbrBlpJi6IuflMR0UuYMTuEDD596MG70CgK0OXz8WvCuKGb47+OtTckHbnZx4n6ldMn5HMoSJWIrBMRH/QlJjK9MxpUTPC3oPbZRf5ABcSYXx5djbWBKsV9iz3poWVIQHNw3b1Fhjw== rsa-key-20210125
+    networks:
+      - net
+
+networks:
+  net:  

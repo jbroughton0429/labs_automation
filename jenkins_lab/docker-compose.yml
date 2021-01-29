@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  jenkins:
+    container_name: jenkins
+    env_file: ./jenkins-server/env_file_jenkins
+    build:
+        context: ./jenkins-server
+        args:
+            HOST_UID: 1004
+            HOST_GID: 999
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - net
+
+volumes:
+  jenkins_home:
+networks:
+  net:  
