@@ -1,3 +1,21 @@
-jenkins_lab/secrets/ssh-agent.key
-jenkins_lab/secrets/ssh-agent.ppk
-jenkins_lab/secrets/ssh-agent.pub
+# My Secrets
+secrets/
+
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# logs
+*.log
+
+# Directories
+.terraform/
+.vagrant/
+**.terraform/
+
+# SSH Keys
+*.pem
+*.key
+*.ppk
+*.pub
